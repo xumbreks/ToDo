@@ -1,21 +1,38 @@
 import { Check } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Trash } from "@phosphor-icons/react";
-import { HeaderTask } from "./HeaderTask";
+import { ITask } from "../App";
 
-export function ListTasks() {
-  const [showCheckButton, setShowCheckButton] = useState(false);
+interface ListTasksProps {
+  data: ITask;
+  titleTask: string;
+  onRemoveTask: (removeTask: string) => void;
+  onToggleTaskStatus: () => void;
+}
+
+export function ListTasks({
+  titleTask,
+  onRemoveTask,
+  onToggleTaskStatus,
+  data,
+}: ListTasksProps) {
+  const [showCheckButton, setShowCheckButton] = useState(data.isChecked);
 
   const toggleButton = () => {
     setShowCheckButton((prev) => !prev);
+    onToggleTaskStatus();
   };
+
+  function handleRemoveTask() {
+    if (!confirm("Deseja remover essa tarefa ?")) return;
+    onRemoveTask(titleTask);
+  }
 
   return (
     <>
-      <HeaderTask />
-      <div className="flex justify-center mt-16">
-        <div className="w-[46rem] bg-base-500 p-4 flex gap-2">
-          <div className="pt-1">
+      <div className="flex justify-center mx-2">
+        <div className="w-[46rem] bg-base-500 p-4 flex justify-between gap-2 ">
+          <div className="pt-1 ">
             {showCheckButton ? (
               <button
                 type="button"
@@ -32,23 +49,17 @@ export function ListTasks() {
               />
             )}
           </div>
-          {!showCheckButton ? (
-            <span className="text-sm transition-colors">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod
-              quos reprehenderit ullam quam consequatur blanditiis eligendi
-              sapiente! Aut, amet. Ea eveniet illo quia dicta? Tempora eos fuga
-              culpa adipisci numquam!
-            </span>
-          ) : (
-            <span className="text-sm line-through text-base-300 transition-colors">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quod
-              quos reprehenderit ullam quam consequatur blanditiis eligendi
-              sapiente! Aut, amet. Ea eveniet illo quia dicta? Tempora eos fuga
-              culpa adipisci numquam!
-            </span>
-          )}
-          <div className="pt-1">
-            <button type="button">
+          <div className="w-full">
+            {!showCheckButton ? (
+              <span className="text-sm transition-colors">{titleTask}</span>
+            ) : (
+              <span className="text-sm line-through text-base-300 transition-colors">
+                {titleTask}
+              </span>
+            )}
+          </div>
+          <div className="flex justify-end items-start">
+            <button onClick={handleRemoveTask} type="button">
               <Trash
                 size={24}
                 className="text-base-300 hover:text-feedback-500 transition-colors"

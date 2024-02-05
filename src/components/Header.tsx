@@ -1,5 +1,4 @@
 import rocket from "../assets/rocket.svg";
-import { Input } from "./Input";
 
 export function Header() {
   return (
@@ -9,7 +8,6 @@ export function Header() {
         <span className="text-[2.5rem] text-product-300 font-black">to</span>
         <span className="text-[2.5rem] text-product-200 font-black">do</span>
       </div>
-      <Input />
     </header>
   );
 }
